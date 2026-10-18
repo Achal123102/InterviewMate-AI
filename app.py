@@ -9,7 +9,26 @@ from io import BytesIO
 from flask import Flask, render_template, request, jsonify, redirect, url_for, abort
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+
+if not os.path.isdir(TEMPLATE_DIR) and os.path.isfile(
+    os.path.join(BASE_DIR, "index.html")
+):
+    TEMPLATE_DIR = BASE_DIR
+
+if not os.path.isdir(STATIC_DIR) and os.path.isfile(
+    os.path.join(BASE_DIR, "style.css")
+):
+    STATIC_DIR = BASE_DIR
+
+app = Flask(
+    __name__,
+    template_folder=TEMPLATE_DIR,
+    static_folder=STATIC_DIR
+)
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "change-this-local-project-key")
 app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
