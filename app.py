@@ -246,7 +246,7 @@ topic, explanation.
 
 Do not repeat questions. Make questions relevant to the role.
 """
-
+        print("Gemini AI question generation started")
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents=prompt,
