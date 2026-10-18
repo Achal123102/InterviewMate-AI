@@ -458,6 +458,7 @@ def start():
     job_description = request.form.get("job_description", "")[:10000]
     match_score, matched, missing = calculate_match(resume_text, job_description)
     questions = ai_questions(interview_type, answer_mode, role, difficulty, resume_text, job_description)
+    print("AI QUESTIONS RESULT:", len(questions) if questions else "NONE")
     source = "AI-generated" if questions else "built-in demo"
     if not questions:
         questions = local_questions(interview_type, answer_mode, role, difficulty, resume_text)
