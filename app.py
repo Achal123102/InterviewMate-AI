@@ -7,6 +7,7 @@ from datetime import datetime
 from io import BytesIO
 
 from flask import Flask, render_template, request, jsonify, redirect, url_for, abort
+from google import genai
 from werkzeug.utils import secure_filename
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
