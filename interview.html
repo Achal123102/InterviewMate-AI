@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Mock Interview | InterviewMate AI{% endblock %}
+{% block content %}
+<div class="interview-head"><a href="{{ url_for('index') }}" class="back">← Dashboard</a><p class="eyebrow">MOCK INTERVIEW</p><h1>Let's practise, {{ candidate }}.</h1><p class="sub">{{ role }} · {{ interview_type }} · {{ difficulty }} · {{ answer_mode }}</p></div>
+{% if match_score is not none %}
+<section class="match-strip panel"><div><p class="eyebrow">RESUME–JOB MATCH</p><strong>{{ match_score }}<small>%</small></strong><span>Keyword overlap estimate, not a hiring decision.</span></div><div class="match-terms"><b>Matched</b><p>{{ matched|join(', ') if matched else 'No keyword overlap detected' }}</p><b>Skills/terms to review</b><p>{{ missing|join(', ') if missing else 'No missing terms found' }}</p></div></section>
+{% endif %}
+<section class="interview-grid">
+ <div class="panel question-panel">
+ <div class="question-top">
+  <span id="q-position">QUESTION 1 OF {{ questions|length }}</span>
+  <span class="chip">{{ answer_mode }}</span>
+  <span id="interview-timer" class="chip">10:00 left</span></div>
+  <div class="progress"><span id="progress-fill" style="width:{{ 100/questions|length }}%"></span></div>
+  <div class="q-mark">Q</div><h2 id="q-text"></h2><p class="hint" id="q-hint"></p>
+  <div id="mcq-options" class="mcq-options"></div>
+  <div id="written-area" class="written-area hidden"><label for="answer-text">Your answer</label><textarea id="answer-text" rows="6" placeholder="Explain your answer here..."></textarea><div class="voice-actions"><button type="button" class="btn light small" id="speak-answer">🎙 Speak answer</button><button type="button" class="btn light small" id="read-question">🔊 Read question</button></div></div>
+  <div class="question-footer"><span id="answered-count">0 answered</span><div><button class="btn light" id="prev-btn" type="button" disabled>← Previous</button><button class="btn primary" id="next-btn" type="button">Next →</button></div></div>
+  <p class="voice-note" id="voice-note">Voice recognition support depends on browser. You can always type.</p>
+ </div>
+ <aside class="panel session-aside"><p class="eyebrow">SESSION DETAILS</p><h3>Stay focused</h3><div class="detail"><span>Candidate</span><b>{{ candidate }}</b></div><div class="detail"><span>Interview type</span><b>{{ interview_type }}</b></div><div class="detail"><span>Role</span><b>{{ role }}</b></div><div class="detail"><span>Question source</span><b>{{ source }}</b></div><div class="tipbox">💡 <b>Tip</b><p>For MCQ, read every option before selecting. For written answers, include your reasoning and an example.</p></div><div class="q-mini-list" id="mini-list">{% for q in questions %}<div><span>{{ "%02d"|format(loop.index) }}</span><small>{{ q['question'] }}</small></div>{% endfor %}</div></aside>
+</section>
+<script>
+window.aiInterview = {
+ candidate: {{ candidate|tojson }}, role: {{ role|tojson }},
+ interviewType: {{ interview_type|tojson }}, difficulty: {{ difficulty|tojson }},
+ answerMode: {{ answer_mode|tojson }}, matchScore: {{ match_score|tojson }},
+ questions: {{ questions|tojson }}
+};
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Interview History | InterviewMate AI{% endblock %}
+{% block content %}
+<div class="result-head"><p class="eyebrow">YOUR PROGRESS</p><h1>Interview history</h1><p class="sub">Review previous scores and open any session for feedback.</p></div>
+<section class="panel history-panel">
+{% if records %}<div class="table-scroll"><table><thead><tr><th>Date</th><th>Type</th><th>Answer mode</th><th>Role</th><th>Match</th><th>Score</th><th></th></tr></thead><tbody>
+{% for row in records %}<tr><td>{{ row['created_at'] }}</td><td>{{ row['interview_type'] }}</td><td>{{ row['answer_mode'] }}</td><td>{{ row['role'] }}</td><td>{{ (row['match_score'] ~ '%') if row['match_score'] is not none else '—' }}</td><td><b class="purple-text">{{ row['score'] }}/100</b></td><td><a href="{{ url_for('result', interview_id=row['id']) }}">Review →</a></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty-state"><h2>No interviews yet</h2><p>Start a practice session to build your history.</p><a class="btn primary" href="{{ url_for('index') }}">Start interview</a></div>{% endif %}
+</section>
+{% endblock %}

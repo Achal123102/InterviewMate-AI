@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | InterviewMate AI{% endblock %}
+{% block content %}
+<section class="hero">
+ <div><p class="eyebrow">YOUR PRACTICE SPACE</p><h1>Your Career.<br><em>Your Next Opportunity.</em></h1>
+  Meet your personal interview coach. Practise role-based questions,
+  test your skills, and improve with personalised feedback</p>
+ <a class="btn primary" href="#setup">Start mock interview ↓</a></div>
+ <div class="hero-art"><div class="bubble">✦</div><div class="hero-note"><b>Practice session</b><span>Questions · Feedback · Progress</span><div class="bars"><i></i><i></i><i></i><i></i><i></i></div></div></div>
+</section>
+{% if error %}<div class="alert">{{ error }}</div>{% endif %}
+<section class="stats">
+ <article><small>INTERVIEWS COMPLETED</small><strong>{{ total }}</strong></article>
+ <article><small>AVERAGE SCORE</small><strong>{{ average }}<span>/100</span></strong></article>
+ <article><small>PRACTICE MODES</small><strong>2 <span>MCQ + Voice/Text</span></strong></article>
+</section>
+<section class="main-grid" id="setup">
+ <form class="panel setup" action="{{ url_for('start') }}" method="post" enctype="multipart/form-data">
+  <div class="panel-title"><div><p class="eyebrow">LET'S BEGIN</p><h2>Set up your interview</h2></div><span class="step">01 / 01</span></div>
+  <label>Your name</label><input name="candidate" placeholder="Enter your name" maxlength="100">
+  <div class="two">
+   <div><label>Target job role</label><select name="role"><option>Computer Science Student</option><option>Python Developer</option><option>Web Developer</option><option>Software Developer</option><option>Data Analyst</option><option>General</option></select></div>
+   <div><label>Difficulty</label><select name="difficulty"><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
+  </div>
+  <label>Interview type</label>
+  <div class="choice-grid">
+   {% for value, icon, label in [('Technical','⌘','Technical'),('HR','♡','HR'),('Aptitude','∑','Aptitude'),('Coding','</>','Coding')] %}
+   <label class="choice"><input type="radio" name="interview_type" value="{{ value }}" {% if loop.first %}checked{% endif %}><span>{{ icon }}</span><b>{{ label }}</b></label>
+   {% endfor %}
+  </div>
+  <label>Answer mode</label>
+  <div class="mode-row">
+   <label><input type="radio" name="answer_mode" value="MCQ" checked><span><b>MCQ quiz</b><small>Choose one correct option</small></span></label>
+   <label><input type="radio" name="answer_mode" value="Written"><span><b>Written / Voice</b><small>Type or speak your answer</small></span></label>
+  </div>
+  <label>Resume upload <span class="optional">PDF or DOCX · optional</span></label>
+  <input class="file-input" type="file" name="resume" accept=".pdf,.docx">
+  <label>Job description <span class="optional">Paste job requirements for match score</span></label>
+  <textarea name="job_description" rows="3" placeholder="Paste job responsibilities or required skills..."></textarea>
+  <button class="btn primary full" type="submit">Start mock interview <span>→</span></button>
+  <p class="note">Resume matching works when you provide both a readable resume and a job description.</p>
+ </form>
+ <aside class="right-col">
+  <section class="panel"><p class="eyebrow">YOUR WORKFLOW</p><h2>From resume to roadmap</h2>
+   <div class="steps">
+    <div><i>1</i><span><b>Resume + job match</b><small>Find matching and missing keywords</small></span></div>
+    <div><i>2</i><span><b>Personalized questions</b><small>Role, skills, difficulty and answer mode</small></span></div>
+    <div><i>3</i><span><b>Feedback + score</b><small>Review each answer and suggested improvement</small></span></div>
+    <div><i>4</i><span><b>Career roadmap</b><small>Plan what to practise next</small></span></div>
+   </div>
+  </section>
+  <section class="panel recent"><div class="panel-title"><h3>Recent interviews</h3><a href="{{ url_for('history') }}">View all ↗</a></div>
+   {% if recent %}{% for row in recent %}<a class="recent-row" href="{{ url_for('result', interview_id=row['id']) }}"><span class="recent-icon">✦</span><span class="recent-meta"><b>
+  {{ row['interview_type'] }} · {{ row['answer_mode'] }}
+  · {{ row['questions_count'] }} questions
+</b><small>{{ row['created_at'] }}</small></span><strong>{{ row['score'] }}<small>/100</small></strong></a>{% endfor %}
+   {% else %}<p class="empty">Complete your first practice session to see history here.</p>{% endif %}
+  </section>
+ </aside>
+</section>
+<section class="history-chart panel"><div class="panel-title"><div><p class="eyebrow">KEEP IMPROVING</p><h2>Recent score trend</h2></div><a href="{{ url_for('history') }}">Full history ↗</a></div>
+{% if history %}<div class="trend">{% for row in history|reverse %}<div class="trend-col"><div class="trend-bar-wrap"><span style="height:{{ row['score'] if row['score']>5 else 5 }}%"></span></div><b>{{ row['score'] }}</b><small>{{ row['created_at'].split(',')[0] }}</small></div>{% endfor %}</div>{% else %}<p class="empty">Your scores will appear after you finish an interview.</p>{% endif %}
+</section>
+{% endblock %}

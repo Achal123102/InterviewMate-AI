@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Interview Result | InterviewMate AI{% endblock %}
+{% block content %}
+<div class="result-head"><p class="eyebrow">INTERVIEW SUMMARY</p><h1>Well done, {{ item['candidate'] }}!</h1><p class="sub">{{ item['interview_type'] }} · {{ item['role'] }} · {{ item['created_at'] }}</p></div>
+<section class="score-cards">
+ <div class="panel overall-card"><small>OVERALL SCORE</small><div class="big-score">{{ item['score'] }}<span>/100</span></div><div class="score-track"><span style="width:{{ item['score'] }}%"></span></div><p>{% if item['score'] >= 75 %}Good practice result. Keep refining your examples.{% elif item['score'] >= 45 %}Good start. Review the feedback and try again.{% else %}Use the topic feedback as a study plan and practise again.{% endif %}</p></div>
+ <div class="panel"><small>TECHNICAL / QUIZ</small><div class="metric">{{ item['technical_score'] }}<span>%</span></div><div class="tiny-track"><span style="width:{{ item['technical_score'] }}%"></span></div></div>
+ <div class="panel"><small>COMMUNICATION</small><div class="metric">{{ item['communication_score'] }}<span>%</span></div><div class="tiny-track"><span style="width:{{ item['communication_score'] }}%"></span></div></div>
+ <div class="panel"><small>CONFIDENCE INDICATOR</small><div class="metric">{{ item['confidence_score'] }}<span>%</span></div><div class="tiny-track"><span style="width:{{ item['confidence_score'] }}%"></span></div><small class="subtle">Text-structure estimate; not a measurement of real emotions.</small></div>
+</section>
+{% if item['match_score'] is not none %}<section class="panel match-result"><div><p class="eyebrow">RESUME–JOB MATCH</p><div class="metric">{{ item['match_score'] }}<span>%</span></div></div><p>This is a simple keyword overlap estimate. It does not judge a person's overall suitability.</p></section>{% endif %}
+<section class="result-columns">
+ <div class="panel"><p class="eyebrow">YOUR NEXT STEPS</p><h2>Personal practice roadmap</h2><h3>Strengths</h3>{% for s in item['strengths_list'] %}<p class="list-line">✓ {{ s }}</p>{% endfor %}<h3>Areas to review</h3>{% for w in item['weak_areas_list'] %}<p class="list-line">↗ {{ w }}</p>{% endfor %}<h3>Career practice plan</h3><ol class="roadmap">{% for r in item['roadmap_list'] %}<li>{{ r }}</li>{% endfor %}</ol><a class="btn primary full" href="{{ url_for('index') }}">Practise again</a></div>
+ <div class="panel"><p class="eyebrow">QUESTION REVIEW</p><h2>Feedback for each answer</h2>
+ {% for d in item['details'] %}<article class="answer-review"><div class="review-top"><span>QUESTION {{ loop.index }} · {{ d['topic'] }}</span><b>{{ d['score'] }}/100</b></div><h3>{{ d['question'] }}</h3><p class="your-answer"><b>Your answer:</b> {{ d['answer'] }}</p><p><b>Feedback:</b> {{ d['feedback'] }}</p>{% if d['suggested_answer'] %}<details><summary>Suggested answer / correct option</summary><p>{{ d['suggested_answer'] }}</p></details>{% endif %}{% if d['missed_points'] %}<details><summary>Important point</summary><p>{{ d['missed_points'] }}</p></details>{% endif %}</article>{% endfor %}
+ </div>
+</section>
+{% endblock %}

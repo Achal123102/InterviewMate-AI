@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}InterviewMate AI{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}"><span>MI</span> InterviewMate AI</a>
+  <nav><a href="{{ url_for('index') }}">Dashboard</a><a href="{{ url_for('history') }}">History</a></nav>
+</header>
+<main class="wrap">{% block content %}{% endblock %}</main>
+<footer>InterviewMate AI · Smart Mock interview practice</footer>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body></html>
