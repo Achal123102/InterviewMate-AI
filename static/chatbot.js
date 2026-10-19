@@ -61,8 +61,22 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ message: text })
       });
 
-      const data = await response.json();
+      const raw = await response.text();
+let data;
 
+try {
+  data = JSON.parse(raw);
+} catch (error) {
+  const preview = raw
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 180);
+
+  throw new Error(
+    `Server response error (HTTP ${response.status}): ${preview || "Unexpected HTML response"}`
+  );
+}
       if (!response.ok) {
         throw new Error(data.reply || "Chatbot service error.");
       }
