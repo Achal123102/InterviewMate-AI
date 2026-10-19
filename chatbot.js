@@ -1,5 +1,8 @@
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (window.interviewMateChatbotReady) return;
+  window.interviewMateChatbotReady = true;
+
   const toggle = document.getElementById("chatbot-toggle");
   const panel = document.getElementById("chatbot-panel");
   const close = document.getElementById("chatbot-close");
@@ -8,28 +11,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const messages = document.getElementById("chatbot-messages");
 
   if (!toggle || !panel || !close || !form || !input || !messages) {
-    console.error("Chatbot HTML elements are missing.");
+    console.error("InterviewMate chatbot: HTML element missing.");
     return;
   }
 
-  toggle.addEventListener("click", () => {
-   panel.classList.remove("hidden");
-panel.style.display = "flex";
-  });
+  function openChat() {
+    panel.classList.remove("hidden");
+    panel.style.display = "flex";
+    input.focus();
+  }
 
-  close.addEventListener("click", () => {
+  function closeChat() {
     panel.classList.add("hidden");
-  });
+    panel.style.display = "none";
+  }
+
+  // Open the chat window
+  toggle.addEventListener("click", openChat);
+
+  // Close the chat window
+  close.addEventListener("click", closeChat);
 
   function addMessage(text, type) {
     const message = document.createElement("div");
-    message.className = type === "user" ? "user-message" : "bot-message";
+    message.className =
+      type === "user" ? "user-message" : "bot-message";
     message.textContent = text;
     messages.appendChild(message);
     messages.scrollTop = messages.scrollHeight;
     return message;
   }
 
+  // Send the message to the Flask chatbot route
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -57,8 +70,8 @@ panel.style.display = "flex";
       waiting.textContent = data.reply || "Please try again.";
     } catch (error) {
       waiting.textContent =
-        "Reply nahi mila. Chatbot backend ya connection check karna hoga.";
-      console.error("Chatbot error:", error);
+        "Could not get a reply. Please check the chatbot server.";
+      console.error("InterviewMate chatbot error:", error);
     }
   });
 });
