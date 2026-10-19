@@ -545,7 +545,7 @@ if (readQuestionBtn) {
       setAgentState("idle", "Error saving interview. Please click Try Again.");
     }
   });
-
+  
   // Global Keyboard Shortcuts
   document.addEventListener("keydown", (e) => {
     // Alt+R: Repeat question
