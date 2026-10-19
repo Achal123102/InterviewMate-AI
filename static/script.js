@@ -476,6 +476,14 @@ document.addEventListener("DOMContentLoaded", () => {
     agentRepeatBtn.addEventListener("click", () => speakQuestion(false));
   }
 
+const readQuestionBtn = document.getElementById("read-question");
+
+if (readQuestionBtn) {
+  readQuestionBtn.addEventListener("click", () => {
+    speakQuestion(false);
+  });
+}
+
   if (agentHintBtn) {
     agentHintBtn.addEventListener("click", giveInterviewerHint);
   }
