@@ -7,7 +7,7 @@ import re
 DEFAULT_GEMINI_KEY = "AQ.Ab8RN6KOEutFnKFOjTNbdG3en-xl1ofEPyMJUwMZZhJcgZTIxw"
 
 def get_api_key():
-    return os.environ.get("GEMINI_API_KEY", "").strip() or DEFAULT_GEMINI_KEY
+    return os.environ.get("GEMINI_API_KEY", "").strip()
 
 def call_gemini(prompt, system_instruction=None, json_mode=True, model=None):
     api_key = get_api_key()
@@ -126,6 +126,7 @@ def gemini_generate_questions(interview_type, answer_mode, role, difficulty, res
     - 2-3 Role-based questions (tailored to target role)
     - Anti-repetition against previous questions
     """
+
     used_sample = list(used_questions)[:30]
     used_clause = ""
     if used_sample:
