@@ -14,4 +14,32 @@
 <footer>InterviewMate AI · Smart Mock interview practice</footer>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 {% block scripts %}{% endblock %}
+
+<!-- InterviewMate AI Chatbot -->
+<button id="chatbot-toggle" class="chatbot-toggle" type="button">
+  🤖 Chat with InterviewMate
+</button>
+
+<div id="chatbot-panel" class="chatbot-panel hidden">
+  <div class="chatbot-header">
+    <div>
+      <strong>🤖 InterviewMate AI</strong>
+      <small>Your interview assistant</small>
+    </div>
+    <button id="chatbot-close" type="button" aria-label="Close chatbot">×</button>
+  </div>
+
+  <div id="chatbot-messages" class="chatbot-messages">
+    <div class="bot-message">
+      Hi! Ask me about resumes, mock interviews, MCQs or interview tips.
+    </div>
+  </div>
+
+  <form id="chatbot-form">
+    <input id="chatbot-input" type="text"
+           placeholder="Type your message..." required>
+    <button type="submit">Send</button>
+  </form>
+</div>
+
 </body></html>
