@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   toggle.addEventListener("click", () => {
-    panel.classList.toggle("hidden");
+   panel.classList.remove("hidden");
+panel.style.display = "flex";
   });
 
   close.addEventListener("click", () => {
