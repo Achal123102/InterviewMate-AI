@@ -575,23 +575,7 @@ if (readQuestionBtn) {
   render();
 });
 
-/* InterviewMate AI Chatbot */
-document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.getElementById("chatbot-toggle");
-  const panel = document.getElementById("chatbot-panel");
-  const close = document.getElementById("chatbot-close");
-  const form = document.getElementById("chatbot-form");
-  const input = document.getElementById("chatbot-input");
-  const messages = document.getElementById("chatbot-messages");
 
-  if (!toggle || !panel || !close || !form || !input || !messages) {
-    return;
-  }
-
-  toggle.addEventListener("click", () => {
-    panel.classList.toggle("hidden");
-    if (!panel.classList.contains("hidden")) input.focus();
-  });
 
   close.addEventListener("click", () => {
     panel.classList.add("hidden");
