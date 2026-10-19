@@ -574,3 +574,79 @@ if (readQuestionBtn) {
   startTimers();
   render();
 });
+
+/* InterviewMate AI Chatbot */
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("chatbot-toggle");
+  const panel = document.getElementById("chatbot-panel");
+  const close = document.getElementById("chatbot-close");
+  const form = document.getElementById("chatbot-form");
+  const input = document.getElementById("chatbot-input");
+  const messages = document.getElementById("chatbot-messages");
+
+  if (!toggle || !panel || !close || !form || !input || !messages) {
+    return;
+  }
+
+  toggle.addEventListener("click", () => {
+    panel.classList.toggle("hidden");
+    if (!panel.classList.contains("hidden")) input.focus();
+  });
+
+  close.addEventListener("click", () => {
+    panel.classList.add("hidden");
+  });
+
+  function addMessage(text, type) {
+    const message = document.createElement("div");
+    message.className = type === "user" ? "user-message" : "bot-message";
+    message.textContent = text;
+    messages.appendChild(message);
+    messages.scrollTop = messages.scrollHeight;
+    return message;
+  }
+
+  function getDemoReply(message) {
+    const text = message.toLowerCase();
+
+    if (text.includes("resume")) {
+      return "Upload your PDF or DOCX resume on the dashboard. Add a job description to see a keyword-match estimate.";
+    }
+
+    if (text.includes("mcq") || text.includes("question")) {
+      return "Choose an interview type and select MCQ mode to practise multiple-choice questions.";
+    }
+
+    if (text.includes("voice") || text.includes("speak") || text.includes("mic")) {
+      return "Choose Written / Voice mode. Allow microphone access to speak your answer. Use Read Question to hear the question aloud.";
+    }
+
+    if (text.includes("score") || text.includes("result") || text.includes("feedback")) {
+      return "Finish your mock interview to view your score and answer feedback. Open Interview History to review saved sessions.";
+    }
+
+    if (text.includes("hello") || text.includes("hi ") || text === "hi") {
+      return "Hello! I'm InterviewMate, your interview practice assistant. Ask me about resumes, MCQs, voice mode or interview results.";
+    }
+
+    if (text.includes("interview") || text.includes("practice")) {
+      return "Select Technical, HR, Aptitude or Coding on the dashboard. Then choose your difficulty and answer mode to start practising.";
+    }
+
+    return "I can help with resume uploads, mock interviews, MCQs, voice mode and interview results. What would you like help with?";
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage(text, "user");
+    input.value = "";
+
+    const reply = getDemoReply(text);
+    addMessage(reply, "bot");
+  });
+});
+
