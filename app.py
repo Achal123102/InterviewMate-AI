@@ -9,6 +9,7 @@ from io import BytesIO
 from flask import Flask, render_template, request, jsonify, redirect, url_for, abort
 from werkzeug.utils import secure_filename
 import question_engine
+from gemini_client import call_gemini
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "change-this-local-project-key")
@@ -505,7 +506,45 @@ def result(interview_id):
     data["weak_areas_list"] = json.loads(data.pop("weak_areas"))
     data["roadmap_list"] = json.loads(data.pop("roadmap"))
     return render_template("result.html", item=data)
+@app.route("/chatbot", methods=["POST"])
+def chatbot():
+    data = request.get_json(silent=True) or {}
+    message = str(data.get("message", "")).strip()
 
+    if not message:
+        return jsonify({"reply": "Please type a message."}), 400
+
+    message = message[:1500]
+
+    system_instruction = """
+    You are InterviewMate AI, a friendly interview practice assistant.
+    Help students with resumes, MCQs, interview preparation,
+    communication skills, and interview feedback.
+    Use simple English. Keep answers helpful and concise.
+    Do not claim to know personal interview history unless provided.
+    """
+
+    prompt = f"Student's question: {message}\nAnswer helpfully."
+
+    try:
+        reply = call_gemini(
+            prompt,
+            system_instruction=system_instruction,
+            json_mode=False
+        )
+
+        if not reply:
+            return jsonify({
+                "reply": "AI service unavailable. Please check the Gemini API configuration."
+            }), 503
+
+        return jsonify({"reply": reply.strip()})
+
+    except Exception:
+        app.logger.exception("Chatbot request failed")
+        return jsonify({
+            "reply": "Sorry, I could not answer right now. Please try again."
+        }), 500
 if __name__ == "__main__":
     init_db()
     app.run(
