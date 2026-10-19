@@ -69,9 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       waiting.textContent = data.reply || "Please try again.";
     } catch (error) {
-      waiting.textContent =
-        "Could not get a reply. Please check the chatbot server.";
-      console.error("InterviewMate chatbot error:", error);
-    }
+  waiting.textContent =
+    error.message || "Unknown chatbot error";
+  console.error("InterviewMate chatbot error:", error);
+}
   });
 });
