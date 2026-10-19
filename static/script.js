@@ -636,14 +636,36 @@ document.addEventListener("DOMContentLoaded", () => {
     return "I can help with resume uploads, mock interviews, MCQs, voice mode and interview results. What would you like help with?";
   }
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
+ 
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-    const text = input.value.trim();
-    if (!text) return;
+  const text = input.value.trim();
+  if (!text) return;
 
-    addMessage(text, "user");
-    input.value = "";
+  addMessage(text, "user");
+  input.value = "";
+
+  const waiting = addMessage("Thinking...", "bot");
+
+  try {
+    const response = await fetch("/chatbot", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: text })
+    });
+
+    const data = await response.json();
+    waiting.textContent = data.reply ||
+      "Sorry, I could not generate a reply.";
+  } catch (error) {
+    waiting.textContent =
+      "Connection problem. Please try again.";
+  }
+});
+
 
     const reply = getDemoReply(text);
     addMessage(reply, "bot");
